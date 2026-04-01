@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alpha Bravo</title>
+<script type="importmap">
+{
+	"imports": {
+		"three": "./threejs/three.module.js"
+	}
+}
+</script>
+<script type="module">
+import * as THREE from "three";
+import { OrbitControls } from './threejs/OrbitControls.js';
+
+const sc = new THREE.Scene();
+const ca = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+ca.up.set(0,0,1);
+ca.position.set(5,2,1);
+
+const rn = new THREE.WebGLRenderer();
+rn.setSize( window.innerWidth, window.innerHeight );
+rn.setAnimationLoop( animate );
+rn.setClearColor(0x00bfff);
+document.body.appendChild( rn.domElement );
+const ct = new OrbitControls(ca, rn.domElement);
+ct.update();
+
+var ob,ge,mt;
+ob = new THREE.AmbientLight(0xd0d0d0);
+sc.add(ob);
+
+ge = new THREE.BoxGeometry( 1, 1, 1 );
+ge.translate(0,0,.5);
+mt = [0xff0000,0xff0000,0x00ff00,0x00ff00,0x0000ff,0x0000ff].map(x => new THREE.MeshLambertMaterial({ color:x }));
+ob = new THREE.Mesh(ge,mt);
+sc.add(ob);
+
+ge = new THREE.PlaneGeometry(4,4);
+mt = new THREE.MeshBasicMaterial({ color:0xffffff, wireframe:true });
+ob = new THREE.Mesh(ge,mt);
+sc.add(ob);
+
+
+function animate( time ) {
+	ct.update();
+	rn.render( sc, ca );
+}
+</script>
+</head>
+<body></body>
+</html>
