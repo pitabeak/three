@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+html, body {
+	margin: 0;
+	height: 100%;
+}
+
+</style>
+<script type="importmap">
+{
+	"imports": {
+		"three": "../three.js/build/three.module.js",
+		"three/addons/": "../three.js/examples/jsm/"
+	}
+}
+
+</script>
+<script type="module">
+import * as THREE from "three";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+
+const sc = new THREE.Scene();
+const ca = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+ca.position.set(5,1,2);
+ca.up.set(0,0,1);
+ca.lookAt(0,0,0);
+
+const rn = new THREE.WebGLRenderer();
+rn.setSize( window.innerWidth, window.innerHeight );
+rn.setClearColor(0x3BB8DB);
+rn.shadowMap.enabled = true;
+rn.setAnimationLoop( animate );
+document.body.appendChild( rn.domElement );
+const ct = new OrbitControls(ca,rn.domElement);
+
+var ge,mt,ob;
+
+ob = new THREE.AmbientLight(0xffffff,1);
+sc.add(ob);
+ob = new THREE.DirectionalLight(0xffffff,9);
+ob.position.set(10,10,10);
+ob.target.position.set(0,0,0);
+sc.add(ob);
+
+const S3 = Math.sqrt(3);
+const r = 2,w = .5,h = .5,n = 10,a = .9;
+ge = new THREE.CylinderGeometry(r,r,w);
+mt = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
+ob = new THREE.Mesh( ge, mt );
+sc.add( ob );
+ge = new THREE.BoxGeometry(w/2,w,r*Math.sin(Math.PI/n*2*a));
+ge.translate((r + h)*Math.cos(Math.PI/n*2*a),0,0);
+mt = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true });
+ob = new THREE.Mesh( ge, mt );
+sc.add( ob );
+
+function animate( time ) {
+	ct.update();
+	rn.render( sc, ca );
+}
+
+</script>
+</head>
+</html>
